@@ -70,6 +70,7 @@ def populate_top250_tv_shows(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
                                                          data.get("items")[i].get("title"),
                                                          data.get("items")[i].get("fullTitle"),
                                                          data.get("items")[i].get("year"),
+                                                         data.get("items")[i].get("crew"),
                                                          data.get("items")[i].get("imDbRating"),
                                                          data.get("items")[i].get("imDbRatingCount")))
     conn.commit()
