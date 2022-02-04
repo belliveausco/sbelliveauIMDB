@@ -16,5 +16,5 @@ portion of a dictionary line and writes them to the file, I added line breaks so
 pair.
 
 The only thing possibly missing would the secrets.py, which follows secret_key = "k_something" logic. I would have liked to break up the lines so then it printed dictionary items for 
-one title and created a space for the next one but indent function wouldn't have applied as smoothly. Other than that it follows the suggested guidlines, prints the ratings first and then the
+one title and created a space for the next one but indent function wouldn't have applied as smoothly. Other than that it follows the suggested guidelines, prints the ratings first and then the
 top 250 shows.
