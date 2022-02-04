@@ -239,7 +239,7 @@ def populate_no_200_show(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
 '''
 # Test info
 def select_from(curs: sqlite3.Cursor):
-    curs.execute("""SELECT * FROM top250_tv_shows""")
+    curs.execute("""SELECT * FROM user_ratings""")
     data = curs.fetchall()
     print(data)
 '''
