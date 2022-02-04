@@ -28,30 +28,31 @@ def setup_top250_tv_shows(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
 
 def setup_user_ratings(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
     cursor.execute("""DROP TABLE IF EXISTS user_ratings""")
-    cursor.execute("""CREATE TABLE IF NOT EXISTS user_ratings(id TEXT,
+    cursor.execute("""CREATE TABLE IF NOT EXISTS user_ratings(ranking TEXT,
+                        id TEXT,
                         totalRating TEXT NOT NULL,
-                        totalRatingVotes TEXT,
-                        10rating% TEXT NOT NULL,
-                        10ratingVotes TEXT NOT NULL,
-                        9rating% TEXT NOT NULL,
-                        9ratingVotes TEXT NOT NULL,
-                        8rating% TEXT NOT NULL,
-                        8ratingVotes TEXT NOT NULL,
-                        7rating% TEXT NOT NULL,
-                        7ratingVotes TEXT NOT NULL,
-                        6rating% TEXT NOT NULL,
-                        6ratingVotes TEXT NOT NULL,
-                        5rating% TEXT NOT NULL,
-                        5ratingVotes TEXT NOT NULL,
-                        4rating% TEXT NOT NULL,
-                        4ratingVotes TEXT NOT NULL,
-                        3rating% TEXT NOT NULL,
-                        3ratingVotes TEXT NOT NULL,
-                        2rating% TEXT NOT NULL,
-                        2ratingVotes TEXT NOT NULL,
-                        rating% TEXT NOT NULL,
-                        ratingVotes TEXT NOT NULL,
-                        PRIMARY KEY (totalRatingVotes),
+                        totalRatingVotes TEXT NOT NULL,
+                        rating10percent TEXT NOT NULL,
+                        rating10Votes TEXT NOT NULL,
+                        rating9percent TEXT NOT NULL,
+                        rating9Votes TEXT NOT NULL,
+                        rating8percent TEXT NOT NULL,
+                        rating8Votes TEXT NOT NULL,
+                        rating7percent TEXT NOT NULL,
+                        rating7Votes TEXT NOT NULL,
+                        rating6percent TEXT NOT NULL,
+                        rating6Votes TEXT NOT NULL,
+                        rating5percent TEXT NOT NULL,
+                        rating5Votes TEXT NOT NULL,
+                        rating4percent TEXT NOT NULL,
+                        rating4Votes TEXT NOT NULL,
+                        rating3percent TEXT NOT NULL,
+                        rating3Votes TEXT NOT NULL,
+                        rating2percent TEXT NOT NULL,
+                        rating2Votes TEXT NOT NULL,
+                        rating1percent TEXT NOT NULL,
+                        rating1Votes TEXT NOT NULL,
+                        PRIMARY KEY (ranking),
                         FOREIGN KEY (id) REFERENCES top250_tv_shows(id)
                         );""")
     conn.commit()
@@ -72,10 +73,169 @@ def populate_top250_tv_shows(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
                                                          data.get("items")[i].get("year"),
                                                          data.get("items")[i].get("crew"),
                                                          data.get("items")[i].get("imDbRating"),
-                                                         data.get("items")[i].get("imDbRatingCount")))
+                                                         data.get("items")[i].get("imDbRatingCount")
+                                                         ))
     conn.commit()
 
 
+def populate_no_1_show(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
+    loc = f"https://imdb-api.com/en/API/UserRatings/{secrets.secret_key}/tt5491994"
+    results = requests.get(loc)
+    if results.status_code != 200:
+        print("help!")
+        return
+    data = results.json()
+
+    cursor.execute("""INSERT INTO user_ratings (ranking, id, totalRating, totalRatingVotes, rating10percent, 
+        rating10Votes, rating9percent, rating9Votes, rating8percent, rating8Votes, rating7percent, rating7Votes, 
+        rating6percent, rating6Votes,rating5percent, rating5Votes, rating4percent, rating4Votes, rating3percent, 
+        rating3Votes, rating2percent, rating2Votes, rating1percent, rating1Votes) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                   ("1",
+                    data.get("imDbId"),
+                    data.get("totalRating"),
+                    data.get("totalRatingVotes"),
+                    data.get("ratings")[0].get("percent"),
+                    data.get("ratings")[0].get("votes"),
+                    data.get("ratings")[1].get("percent"),
+                    data.get("ratings")[1].get("votes"),
+                    data.get("ratings")[2].get("percent"),
+                    data.get("ratings")[2].get("votes"),
+                    data.get("ratings")[3].get("percent"),
+                    data.get("ratings")[3].get("votes"),
+                    data.get("ratings")[4].get("percent"),
+                    data.get("ratings")[4].get("votes"),
+                    data.get("ratings")[5].get("percent"),
+                    data.get("ratings")[5].get("votes"),
+                    data.get("ratings")[6].get("percent"),
+                    data.get("ratings")[6].get("votes"),
+                    data.get("ratings")[7].get("percent"),
+                    data.get("ratings")[7].get("votes"),
+                    data.get("ratings")[8].get("percent"),
+                    data.get("ratings")[8].get("votes"),
+                    data.get("ratings")[9].get("percent"),
+                    data.get("ratings")[9].get("votes")))
+    conn.commit()
+
+
+def populate_no_50_show(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
+    loc = f"https://imdb-api.com/en/API/UserRatings/{secrets.secret_key}/tt0081834"
+    results = requests.get(loc)
+    if results.status_code != 200:
+        print("help!")
+        return
+    data = results.json()
+
+    cursor.execute("""INSERT INTO user_ratings (ranking, id, totalRating, totalRatingVotes, rating10percent, 
+        rating10Votes, rating9percent, rating9Votes, rating8percent, rating8Votes, rating7percent, rating7Votes, 
+        rating6percent, rating6Votes,rating5percent, rating5Votes, rating4percent, rating4Votes, rating3percent, 
+        rating3Votes, rating2percent, rating2Votes, rating1percent, rating1Votes) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                   ("50",
+                    data.get("imDbId"),
+                    data.get("totalRating"),
+                    data.get("totalRatingVotes"),
+                    data.get("ratings")[0].get("percent"),
+                    data.get("ratings")[0].get("votes"),
+                    data.get("ratings")[1].get("percent"),
+                    data.get("ratings")[1].get("votes"),
+                    data.get("ratings")[2].get("percent"),
+                    data.get("ratings")[2].get("votes"),
+                    data.get("ratings")[3].get("percent"),
+                    data.get("ratings")[3].get("votes"),
+                    data.get("ratings")[4].get("percent"),
+                    data.get("ratings")[4].get("votes"),
+                    data.get("ratings")[5].get("percent"),
+                    data.get("ratings")[5].get("votes"),
+                    data.get("ratings")[6].get("percent"),
+                    data.get("ratings")[6].get("votes"),
+                    data.get("ratings")[7].get("percent"),
+                    data.get("ratings")[7].get("votes"),
+                    data.get("ratings")[8].get("percent"),
+                    data.get("ratings")[8].get("votes"),
+                    data.get("ratings")[9].get("percent"),
+                    data.get("ratings")[9].get("votes")))
+    conn.commit()
+
+
+def populate_no_100_show(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
+    loc = f"https://imdb-api.com/en/API/UserRatings/{secrets.secret_key}/tt0096697"
+    results = requests.get(loc)
+    if results.status_code != 200:
+        print("help!")
+        return
+    data = results.json()
+
+    cursor.execute("""INSERT INTO user_ratings (ranking, id, totalRating, totalRatingVotes, rating10percent, 
+        rating10Votes, rating9percent, rating9Votes, rating8percent, rating8Votes, rating7percent, rating7Votes, 
+        rating6percent, rating6Votes,rating5percent, rating5Votes, rating4percent, rating4Votes, rating3percent, 
+        rating3Votes, rating2percent, rating2Votes, rating1percent, rating1Votes) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                   ("100",
+                    data.get("imDbId"),
+                    data.get("totalRating"),
+                    data.get("totalRatingVotes"),
+                    data.get("ratings")[0].get("percent"),
+                    data.get("ratings")[0].get("votes"),
+                    data.get("ratings")[1].get("percent"),
+                    data.get("ratings")[1].get("votes"),
+                    data.get("ratings")[2].get("percent"),
+                    data.get("ratings")[2].get("votes"),
+                    data.get("ratings")[3].get("percent"),
+                    data.get("ratings")[3].get("votes"),
+                    data.get("ratings")[4].get("percent"),
+                    data.get("ratings")[4].get("votes"),
+                    data.get("ratings")[5].get("percent"),
+                    data.get("ratings")[5].get("votes"),
+                    data.get("ratings")[6].get("percent"),
+                    data.get("ratings")[6].get("votes"),
+                    data.get("ratings")[7].get("percent"),
+                    data.get("ratings")[7].get("votes"),
+                    data.get("ratings")[8].get("percent"),
+                    data.get("ratings")[8].get("votes"),
+                    data.get("ratings")[9].get("percent"),
+                    data.get("ratings")[9].get("votes")))
+    conn.commit()
+
+
+def populate_no_200_show(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
+    loc = f"https://imdb-api.com/en/API/UserRatings/{secrets.secret_key}/tt1492966"
+    results = requests.get(loc)
+    if results.status_code != 200:
+        print("help!")
+        return
+    data = results.json()
+
+    cursor.execute("""INSERT INTO user_ratings (ranking, id, totalRating, totalRatingVotes, rating10percent, 
+        rating10Votes, rating9percent, rating9Votes, rating8percent, rating8Votes, rating7percent, rating7Votes, 
+        rating6percent, rating6Votes,rating5percent, rating5Votes, rating4percent, rating4Votes, rating3percent, 
+        rating3Votes, rating2percent, rating2Votes, rating1percent, rating1Votes) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                   ("200",
+                    data.get("imDbId"),
+                    data.get("totalRating"),
+                    data.get("totalRatingVotes"),
+                    data.get("ratings")[0].get("percent"),
+                    data.get("ratings")[0].get("votes"),
+                    data.get("ratings")[1].get("percent"),
+                    data.get("ratings")[1].get("votes"),
+                    data.get("ratings")[2].get("percent"),
+                    data.get("ratings")[2].get("votes"),
+                    data.get("ratings")[3].get("percent"),
+                    data.get("ratings")[3].get("votes"),
+                    data.get("ratings")[4].get("percent"),
+                    data.get("ratings")[4].get("votes"),
+                    data.get("ratings")[5].get("percent"),
+                    data.get("ratings")[5].get("votes"),
+                    data.get("ratings")[6].get("percent"),
+                    data.get("ratings")[6].get("votes"),
+                    data.get("ratings")[7].get("percent"),
+                    data.get("ratings")[7].get("votes"),
+                    data.get("ratings")[8].get("percent"),
+                    data.get("ratings")[8].get("votes"),
+                    data.get("ratings")[9].get("percent"),
+                    data.get("ratings")[9].get("votes")))
+    conn.commit()
 '''
 # Test info
 def select_from(curs: sqlite3.Cursor):
@@ -89,8 +249,13 @@ def main():
     database = 'imDb.db'
     conn, curs = open_db(database)
     setup_top250_tv_shows(curs, conn)
-    # setup_user_ratings(curs, conn)
+    setup_user_ratings(curs, conn)
     populate_top250_tv_shows(curs, conn)
+    populate_no_1_show(curs, conn)
+    populate_no_50_show(curs, conn)
+    populate_no_100_show(curs, conn)
+    populate_no_200_show(curs, conn)
+
     # select_from(curs)
 
 
