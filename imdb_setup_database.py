@@ -27,8 +27,8 @@ def setup_top250_tv_shows(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
 
 
 def setup_user_ratings(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
-    cursor.execute("""DROP TABLE IF EXISTS setup_user_ratings""")
-    cursor.execute("""CREATE TABLE IF NOT EXISTS setup_user_ratings(id TEXT,
+    cursor.execute("""DROP TABLE IF EXISTS user_ratings""")
+    cursor.execute("""CREATE TABLE IF NOT EXISTS user_ratings(id TEXT,
                         totalRating TEXT NOT NULL,
                         totalRatingVotes TEXT,
                         10rating% TEXT NOT NULL,
@@ -77,7 +77,7 @@ def populate_top250_tv_shows(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
 
 
 '''
-# Test
+# Test info
 def select_from(curs: sqlite3.Cursor):
     curs.execute("""SELECT * FROM top250_tv_shows""")
     data = curs.fetchall()
@@ -89,7 +89,7 @@ def main():
     database = 'imDb.db'
     conn, curs = open_db(database)
     setup_top250_tv_shows(curs, conn)
-    setup_user_ratings(curs, conn)
+    # setup_user_ratings(curs, conn)
     populate_top250_tv_shows(curs, conn)
     # select_from(curs)
 
