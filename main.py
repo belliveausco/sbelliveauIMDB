@@ -71,7 +71,7 @@ def no_200_show():
     a = open("data.txt", "a+")
     a.write(f"Ratings for No 200 TV Show")
     a.write(f"\n")
-    loc = f"https://imdb-api.com/en/API/UserRatings/{secrets.secret_key}/tt2100976"  # look up tt number code for shows you are looking at
+    loc = f"https://imdb-api.com/en/API/UserRatings/{secrets.secret_key}/tt1492966"  # look up tt number code for shows you are looking at
     results = requests.get(loc)
     if results.status_code != 200:
         print("help!")
