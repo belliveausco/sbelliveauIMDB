@@ -78,6 +78,25 @@ def populate_top250_tv_shows(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
     conn.commit()
 
 
+def add_wot_top250_tv_shows(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
+    loc = f"https://imdb-api.com/API/Ratings/{secrets.secret_key}/tt7462410"
+    results = requests.get(loc)
+    if results.status_code != 200:
+        print("help!")
+        return
+    data = results.json()
+    cursor.execute("""INSERT INTO top250_tv_shows (id, title, fullTitle, year, crew, imDbRating, imDbRatingCount)
+                          VALUES (?, ?, ?, ?, ?, ?, ?)""", (data.get("imDbId"),
+                                                            data.get("title"),
+                                                            data.get("fullTitle"),
+                                                            data.get("year"),
+                                                            "Rosamund Pike, Daniel Henney",
+                                                            data.get("imDb"),
+                                                            "85226"
+                                                            ))
+    conn.commit()
+
+
 def populate_no_1_show(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
     loc = f"https://imdb-api.com/en/API/UserRatings/{secrets.secret_key}/tt5491994"
     results = requests.get(loc)
@@ -119,7 +138,7 @@ def populate_no_1_show(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
 
 
 def populate_no_50_show(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
-    loc = f"https://imdb-api.com/en/API/UserRatings/{secrets.secret_key}/tt0081834"
+    loc = f"https://imdb-api.com/en/API/UserRatings/{secrets.secret_key}/tt2297757"
     results = requests.get(loc)
     if results.status_code != 200:
         print("help!")
@@ -159,7 +178,7 @@ def populate_no_50_show(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
 
 
 def populate_no_100_show(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
-    loc = f"https://imdb-api.com/en/API/UserRatings/{secrets.secret_key}/tt0096697"
+    loc = f"https://imdb-api.com/en/API/UserRatings/{secrets.secret_key}/tt0286486"
     results = requests.get(loc)
     if results.status_code != 200:
         print("help!")
@@ -199,7 +218,7 @@ def populate_no_100_show(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
 
 
 def populate_no_200_show(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
-    loc = f"https://imdb-api.com/en/API/UserRatings/{secrets.secret_key}/tt1492966"
+    loc = f"https://imdb-api.com/en/API/UserRatings/{secrets.secret_key}/tt7472896"
     results = requests.get(loc)
     if results.status_code != 200:
         print("help!")
@@ -236,6 +255,47 @@ def populate_no_200_show(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
                     data.get("ratings")[9].get("percent"),
                     data.get("ratings")[9].get("votes")))
     conn.commit()
+
+
+def populate_wot_show(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
+    loc = f"https://imdb-api.com/en/API/UserRatings/{secrets.secret_key}/tt7462410"
+    results = requests.get(loc)
+    if results.status_code != 200:
+        print("help!")
+        return
+    data = results.json()
+
+    cursor.execute("""INSERT INTO user_ratings (ranking, id, totalRating, totalRatingVotes, rating10percent, 
+        rating10Votes, rating9percent, rating9Votes, rating8percent, rating8Votes, rating7percent, rating7Votes, 
+        rating6percent, rating6Votes,rating5percent, rating5Votes, rating4percent, rating4Votes, rating3percent, 
+        rating3Votes, rating2percent, rating2Votes, rating1percent, rating1Votes) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                   ("251",
+                    data.get("imDbId"),
+                    data.get("totalRating"),
+                    data.get("totalRatingVotes"),
+                    data.get("ratings")[0].get("percent"),
+                    data.get("ratings")[0].get("votes"),
+                    data.get("ratings")[1].get("percent"),
+                    data.get("ratings")[1].get("votes"),
+                    data.get("ratings")[2].get("percent"),
+                    data.get("ratings")[2].get("votes"),
+                    data.get("ratings")[3].get("percent"),
+                    data.get("ratings")[3].get("votes"),
+                    data.get("ratings")[4].get("percent"),
+                    data.get("ratings")[4].get("votes"),
+                    data.get("ratings")[5].get("percent"),
+                    data.get("ratings")[5].get("votes"),
+                    data.get("ratings")[6].get("percent"),
+                    data.get("ratings")[6].get("votes"),
+                    data.get("ratings")[7].get("percent"),
+                    data.get("ratings")[7].get("votes"),
+                    data.get("ratings")[8].get("percent"),
+                    data.get("ratings")[8].get("votes"),
+                    data.get("ratings")[9].get("percent"),
+                    data.get("ratings")[9].get("votes")))
+    conn.commit()
+
 '''
 # Test info
 def select_from(curs: sqlite3.Cursor):
@@ -251,10 +311,12 @@ def main():
     setup_top250_tv_shows(curs, conn)
     setup_user_ratings(curs, conn)
     populate_top250_tv_shows(curs, conn)
+    add_wot_top250_tv_shows(curs, conn)
     populate_no_1_show(curs, conn)
     populate_no_50_show(curs, conn)
     populate_no_100_show(curs, conn)
     populate_no_200_show(curs, conn)
+    populate_wot_show(curs, conn)
 
     # select_from(curs)
 
