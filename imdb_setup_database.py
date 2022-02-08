@@ -296,13 +296,12 @@ def populate_wot_show(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
                     data.get("ratings")[9].get("votes")))
     conn.commit()
 
-'''
-# Test info
+
+# First automated test for checking it retrieves the top250 data from the web and assures that we get 250 data items
 def select_from(curs: sqlite3.Cursor):
-    curs.execute("""SELECT * FROM user_ratings""")
+    curs.execute("""SELECT * FROM top250_tv_shows""")
     data = curs.fetchall()
     print(data)
-'''
 
 
 def main():
@@ -318,7 +317,7 @@ def main():
     populate_no_200_show(curs, conn)
     populate_wot_show(curs, conn)
 
-    # select_from(curs)
+    select_from(curs)
 
 
 main()
