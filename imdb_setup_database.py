@@ -297,7 +297,7 @@ def populate_wot_show(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
     conn.commit()
 
 
-# First automated test for checking it retrieves the top250 data from the web and assures that we get 250 data items
+# First automated test for checking that it retrieves the top250 data from the web and assures it adds correct items
 def select_from(curs: sqlite3.Cursor):
     curs.execute("""SELECT * FROM top250_tv_shows""")
     data = curs.fetchall()
