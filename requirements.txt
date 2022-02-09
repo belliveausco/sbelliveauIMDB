@@ -1,0 +1,7 @@
+Must have these libraries installed
+
+import sqlite3
+from typing import Tuple
+import requests
+
+import secrets
