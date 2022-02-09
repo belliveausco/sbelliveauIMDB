@@ -59,27 +59,6 @@ def setup_user_ratings(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
     conn.commit()
 
 
-def sample_data_top250_tv_shows():
-    loc = f"https://imdb-api.com/en/API/Top250TVs/{secrets.secret_key}"
-    results = requests.get(loc)
-    if results.status_code != 200:
-        print("help!")
-        return
-    data = results.json()
-    count = 0
-    for i in range(0, 250):
-        data.get("items")[i].get("id"),
-        data.get("items")[i].get("title"),
-        data.get("items")[i].get("fullTitle"),
-        data.get("items")[i].get("year"),
-        data.get("items")[i].get("crew"),
-        data.get("items")[i].get("imDbRating"),
-        data.get("items")[i].get("imDbRatingCount")
-        count = count + 1
-    result = count
-    return result
-
-
 def populate_top250_tv_shows(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
     loc = f"https://imdb-api.com/en/API/Top250TVs/{secrets.secret_key}"
     results = requests.get(loc)
@@ -98,6 +77,11 @@ def populate_top250_tv_shows(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
                                                          data.get("items")[i].get("imDbRatingCount")
                                                          ))
     conn.commit()
+    result = cursor.execute(f'SELECT COUNT(id) FROM top250_tv_shows;')
+    for column in result:
+        print(f'Number of columns: {column[0]}')
+        final_result = f'{column[0]}'
+        return final_result
 
 
 def add_wot_top250_tv_shows(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
@@ -325,7 +309,6 @@ def main():
     setup_top250_tv_shows(curs, conn)
     setup_user_ratings(curs, conn)
     populate_top250_tv_shows(curs, conn)
-    sample_data_top250_tv_shows()
     add_wot_top250_tv_shows(curs, conn)
     populate_no_1_show(curs, conn)
     populate_no_50_show(curs, conn)
