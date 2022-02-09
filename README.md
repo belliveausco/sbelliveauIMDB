@@ -19,5 +19,5 @@ a very brief discussion of your database layout and the table(s) you used
 The tables made are top250_tv_shows and user_ratings. The top250_tv_shows contain all 250 top tv titles and the user_ratings contain all user rankings. sqlite3 was utilized, functions like create table if not exists and drop table if exist were used. Used cursor, conn.
 
 a brief description of what is missing from the project (if anything)
-Nothing is missing, it was hard to retrieve the length of the data I inserted for the top 250 shows because of how I automated how data was inserted but the count function confirms that 250 entries are made. Also, a simple rerun of the code will create a database which shows all data appropriated into the correct fields.
+Nothing is missing, test1 will confirm a value of 250 is achieved from the data.
 '''
