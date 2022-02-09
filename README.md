@@ -2,7 +2,8 @@
 Scott Belliveau
 
 any install and run directions I need.
-Must install these libraries:
+external applications specified as needed:
+(could not push a requirements.txt)
 import sqlite3
 from typing import Tuple
 import requests
