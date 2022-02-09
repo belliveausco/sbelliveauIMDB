@@ -77,10 +77,13 @@ def populate_top250_tv_shows(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
                                                          data.get("items")[i].get("imDbRatingCount")
                                                          ))
     conn.commit()
+
+
+def test_size(cursor: sqlite3.Cursor):
     result = cursor.execute(f'SELECT COUNT(id) FROM top250_tv_shows;')
     for column in result:
-        print(f'Number of columns: {column[0]}')
-        final_result = f'{column[0]}'
+        print(f'{column[0]}')
+        final_result = column[0]
         return final_result
 
 
@@ -310,6 +313,7 @@ def main():
     setup_user_ratings(curs, conn)
     populate_top250_tv_shows(curs, conn)
     add_wot_top250_tv_shows(curs, conn)
+    test_size(curs)
     populate_no_1_show(curs, conn)
     populate_no_50_show(curs, conn)
     populate_no_100_show(curs, conn)
