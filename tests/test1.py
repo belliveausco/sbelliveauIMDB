@@ -13,7 +13,6 @@ def close_db(connection: sqlite3.Connection):
     connection.close()
 
 
-
 def test_data_size(cursor: sqlite3.Cursor):
     final_result = imdb_setup_database.test_size(cursor)
     assert final_result == 251
@@ -22,4 +21,3 @@ def test_data_size(cursor: sqlite3.Cursor):
 database = 'imDb.db'
 conn, curs = open_db(database)
 test_data_size(curs)
-

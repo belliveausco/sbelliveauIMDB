@@ -87,7 +87,6 @@ def test_size(cursor: sqlite3.Cursor):
         return final_result
 
 
-
 def add_wot_top250_tv_shows(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
     loc = f"https://imdb-api.com/API/Ratings/{secrets.secret_key}/tt7462410"
     results = requests.get(loc)
