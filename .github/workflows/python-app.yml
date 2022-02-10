@@ -25,8 +25,6 @@ jobs:
         run: |
           echo $API_KEY >> bare.py
           echo 'secret_key = "'secret_key'"' >> secrets.py
-          - name: Install dependencies
-            run: |
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
