@@ -1,4 +1,5 @@
 # Second automated test
+# saving to database and assuring what you wrote is there, look at posted code on github
 import sqlite3
 from typing import Tuple
 
@@ -39,11 +40,20 @@ def test_show_dictionary(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
                                                                 data.get("items")[0].get("imDbRatingCount")
                                                                 ))
     conn.commit()
-
     result = cursor.execute(f'SELECT * FROM test_top250_tv_shows')
     for row in result:
         print(f'id: {row[0]}\ntitle: {row[1]}\nfullTitle: {row[2]}\nyear: {row[3]}\ncrew: {row[4]}\n'
               f'imDbRating: {row[5]}\nimDbRatingCount: {row[6]}\n')
+
+    cursor.execute('''SELECT * FROM test_top250_tv_shows''')
+    results = cursor.fetchall()
+    print(len(results))
+    assert len(results) == 1
+    cursor.execute('''SELECT id FROM test_top250_tv_shows''')
+    id_verification = cursor.fetchall()
+    test_id = id_verification[0]
+    print(test_id[0])
+    assert test_id[0] == 'tt5555555'
 
 
 def main():
