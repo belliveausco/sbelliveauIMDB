@@ -1,7 +1,6 @@
 import sqlite3
 from typing import Tuple
 import requests
-
 import secrets
 
 
@@ -66,7 +65,7 @@ def populate_top250_tv_shows(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
         print("help!")
         return
     data = results.json()
-    for i in range(0, 250):
+    for i in range(0, 249):
         cursor.execute("""INSERT INTO top250_tv_shows (id, title, fullTitle, year, crew, imDbRating, imDbRatingCount)
                        VALUES (?, ?, ?, ?, ?, ?, ?)""", (data.get("items")[i].get("id"),
                                                          data.get("items")[i].get("title"),
