@@ -22,9 +22,8 @@ jobs:
         python-version: "3.10"
     - name: Build Secrets
       env:
-        API_KEY: ${{ secrets.secret_key }}
+        API_KEY: ${{ secrets.API_key }}
       run: |
-        echo $API_KEY >> bare.py
         echo 'secret_key = "'$API_KEY'"' >> secrets.py
     - name: Install dependencies
       run: |
@@ -41,3 +40,4 @@ jobs:
       run: |
         #pytest
         python -m pytest tests/*
+      
