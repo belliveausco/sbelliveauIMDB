@@ -40,6 +40,10 @@ def test_show_dictionary(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
                                                                 data.get("items")[0].get("imDbRatingCount")
                                                                 ))
     conn.commit()
+
+    test_close_db(conn)
+    conn, cursor = test_open_db('test_250.db')
+
     result = cursor.execute(f'SELECT * FROM test_top250_tv_shows')
     for row in result:
         print(f'id: {row[0]}\ntitle: {row[1]}\nfullTitle: {row[2]}\nyear: {row[3]}\ncrew: {row[4]}\n'
