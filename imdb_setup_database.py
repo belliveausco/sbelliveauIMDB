@@ -226,42 +226,75 @@ def populate_no_100_show(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
 
 
 def populate_no_200_show(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
-    loc = f"https://imdb-api.com/en/API/UserRatings/{secrets.secret_key}/tt1492966"
+    loc = f"https://imdb-api.com/en/API/UserRatings/{secrets.secret_key}/tt2100976"
     results = requests.get(loc)
     if results.status_code != 200:
         print("help!")
         return
     data = results.json()
 
-    cursor.execute("""INSERT INTO user_ratings (ranking, id, totalRating, totalRatingVotes, rating10percent, 
-        rating10Votes, rating9percent, rating9Votes, rating8percent, rating8Votes, rating7percent, rating7Votes, 
-        rating6percent, rating6Votes,rating5percent, rating5Votes, rating4percent, rating4Votes, rating3percent, 
-        rating3Votes, rating2percent, rating2Votes, rating1percent, rating1Votes) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
-                   ("200",
-                    data.get("imDbId"),
-                    data.get("totalRating"),
-                    data.get("totalRatingVotes"),
-                    data.get("ratings")[0].get("percent"),
-                    data.get("ratings")[0].get("votes"),
-                    data.get("ratings")[1].get("percent"),
-                    data.get("ratings")[1].get("votes"),
-                    data.get("ratings")[2].get("percent"),
-                    data.get("ratings")[2].get("votes"),
-                    data.get("ratings")[3].get("percent"),
-                    data.get("ratings")[3].get("votes"),
-                    data.get("ratings")[4].get("percent"),
-                    data.get("ratings")[4].get("votes"),
-                    data.get("ratings")[5].get("percent"),
-                    data.get("ratings")[5].get("votes"),
-                    data.get("ratings")[6].get("percent"),
-                    data.get("ratings")[6].get("votes"),
-                    data.get("ratings")[7].get("percent"),
-                    data.get("ratings")[7].get("votes"),
-                    data.get("ratings")[8].get("percent"),
-                    data.get("ratings")[8].get("votes"),
-                    data.get("ratings")[9].get("percent"),
-                    data.get("ratings")[9].get("votes")))
+    try:
+        cursor.execute("""INSERT INTO user_ratings (ranking, id, totalRating, totalRatingVotes, rating10percent, 
+            rating10Votes, rating9percent, rating9Votes, rating8percent, rating8Votes, rating7percent, rating7Votes, 
+            rating6percent, rating6Votes,rating5percent, rating5Votes, rating4percent, rating4Votes, rating3percent, 
+            rating3Votes, rating2percent, rating2Votes, rating1percent, rating1Votes) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                       ("200",
+                        data.get("imDbId"),
+                        data.get("totalRating"),
+                        data.get("totalRatingVotes"),
+                        data.get("ratings")[0].get("percent"),
+                        data.get("ratings")[0].get("votes"),
+                        data.get("ratings")[1].get("percent"),
+                        data.get("ratings")[1].get("votes"),
+                        data.get("ratings")[2].get("percent"),
+                        data.get("ratings")[2].get("votes"),
+                        data.get("ratings")[3].get("percent"),
+                        data.get("ratings")[3].get("votes"),
+                        data.get("ratings")[4].get("percent"),
+                        data.get("ratings")[4].get("votes"),
+                        data.get("ratings")[5].get("percent"),
+                        data.get("ratings")[5].get("votes"),
+                        data.get("ratings")[6].get("percent"),
+                        data.get("ratings")[6].get("votes"),
+                        data.get("ratings")[7].get("percent"),
+                        data.get("ratings")[7].get("votes"),
+                        data.get("ratings")[8].get("percent"),
+                        data.get("ratings")[8].get("votes"),
+                        data.get("ratings")[9].get("percent"),
+                        data.get("ratings")[9].get("votes")))
+    except Exception as e:
+        print(Exception, e)
+        cursor.execute("""INSERT INTO user_ratings (ranking, id, totalRating, totalRatingVotes, rating10percent, 
+                    rating10Votes, rating9percent, rating9Votes, rating8percent, rating8Votes, rating7percent, rating7Votes, 
+                    rating6percent, rating6Votes,rating5percent, rating5Votes, rating4percent, rating4Votes, rating3percent, 
+                    rating3Votes, rating2percent, rating2Votes, rating1percent, rating1Votes) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                       ("200",
+                        data.get("imDbId"),
+                        data.get("totalRating"),
+                        data.get("totalRatingVotes"),
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0"))
+
     conn.commit()
 
 
