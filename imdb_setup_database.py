@@ -374,7 +374,7 @@ def populate_top250_movies(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
 def setup_most_popular_movies(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
     cursor.execute("""DROP TABLE IF EXISTS most_popular_movies""")
     cursor.execute("""CREATE TABLE IF NOT EXISTS most_popular_movies(pop_movie_id TEXT PRIMARY KEY,
-                        rankUpDown TEXT NOT NULL,
+                        rankUpDown INTEGER NOT NULL,
                         title TEXT NOT NULL,
                         fullTitle TEXT NOT NULL,
                         year TEXT NOT NULL,
@@ -393,15 +393,16 @@ def populate_most_popular_movies(cursor: sqlite3.Cursor, conn: sqlite3.Connectio
     data = results.json()
     for i in range(0, 100):
         cursor.execute("""INSERT INTO most_popular_movies (pop_movie_id, rankUpDown, title, fullTitle, year, crew, 
-        imDbRating, imDbRatingCount) VALUES (?, ?, ?, ?, ?, ?, ?, ?)""", (data.get("items")[i].get("id"),
-                                                                          data.get("items")[i].get("rankUpDown"),
-                                                                          data.get("items")[i].get("title"),
-                                                                          data.get("items")[i].get("fullTitle"),
-                                                                          data.get("items")[i].get("year"),
-                                                                          data.get("items")[i].get("crew"),
-                                                                          data.get("items")[i].get("imDbRating"),
-                                                                          data.get("items")[i].get("imDbRatingCount")
-                                                                          ))
+        imDbRating, imDbRatingCount) VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+                       (data.get("items")[i].get("id"),
+                        int((data.get("items")[i].get("rankUpDown").replace(',', ''))),
+                        data.get("items")[i].get("title"),
+                        data.get("items")[i].get("fullTitle"),
+                        data.get("items")[i].get("year"),
+                        data.get("items")[i].get("crew"),
+                        data.get("items")[i].get("imDbRating"),
+                        data.get("items")[i].get("imDbRatingCount")
+                        ))
     conn.commit()
 
 
@@ -437,163 +438,309 @@ def setup_movie_user_ratings(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
     conn.commit()
 
 
-def populate_no_1_movie(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
-    loc = f"https://imdb-api.com/en/API/UserRatings/{secrets.secret_key}/tt1798632"
+def populate_rankings_movie(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
+    loc = f"https://imdb-api.com/en/API/MostPopularMovies/{secrets.secret_key}"
     results = requests.get(loc)
     if results.status_code != 200:
         print("help!")
         return
     data = results.json()
+    a = list()
+    for i in range(0, 100):
+        a.append(int((data.get("items")[i].get("rankUpDown").replace(',', ''))))
+        a.sort()
+    a4 = a[0]
+    a3 = a[97]
+    a2 = a[98]
+    a1 = a[99]
+    tt_id = None
+    tt_id1 = None
+    tt_id2 = None
+    tt_id3 = None
+    return_data = cursor.execute(f'SELECT * from most_popular_movies WHERE rankUpDown = {a1}')
+    for row in return_data:
+        tt_id = row[0]
+    return_data1 = cursor.execute(f'SELECT * from most_popular_movies WHERE rankUpDown = {a2}')
+    for row in return_data1:
+        tt_id1 = row[0]
+    return_data2 = cursor.execute(f'SELECT * from most_popular_movies WHERE rankUpDown = {a3}')
+    for row in return_data2:
+        tt_id2 = row[0]
+    return_data3 = cursor.execute(f'SELECT * from most_popular_movies WHERE rankUpDown = {a4}')
+    for row in return_data3:
+        tt_id3 = row[0]
 
-    cursor.execute("""INSERT INTO movie_user_ratings (rankUpDown, pop_movie_id, totalRating, totalRatingVotes, 
-    rating10percent, rating10Votes, rating9percent, rating9Votes, rating8percent, rating8Votes, rating7percent, 
-    rating7Votes, rating6percent, rating6Votes,rating5percent, rating5Votes, rating4percent, rating4Votes, 
-    rating3percent, rating3Votes, rating2percent, rating2Votes, rating1percent, rating1Votes) VALUES (?, ?, ?, ?, ?, 
-    ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
-                   ("+3,755",
-                    data.get("imDbId"),
-                    "0",
-                    "0",
-                    "0",
-                    "0",
-                    "0",
-                    "0",
-                    "0",
-                    "0",
-                    "0",
-                    "0",
-                    "0",
-                    "0",
-                    "0",
-                    "0",
-                    "0",
-                    "0",
-                    "0",
-                    "0",
-                    "0",
-                    "0",
-                    "0",
-                    "0"))
+    loc = f"https://imdb-api.com/en/API/UserRatings/{secrets.secret_key}/{tt_id}"
+    results = requests.get(loc)
+    if results.status_code != 200:
+        print("help!")
+        return
+    data = results.json()
+    try:
+        cursor.execute("""INSERT INTO movie_user_ratings (rankUpDown, pop_movie_id, totalRating, totalRatingVotes, 
+        rating10percent, rating10Votes, rating9percent, rating9Votes, rating8percent, rating8Votes, rating7percent, 
+        rating7Votes, rating6percent, rating6Votes,rating5percent, rating5Votes, rating4percent, rating4Votes, 
+        rating3percent, rating3Votes, rating2percent, rating2Votes, rating1percent, rating1Votes) VALUES (?, ?, ?, ?, 
+        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                       (a1,
+                        data.get("imDbId"),
+                        data.get("totalRating"),
+                        data.get("totalRatingVotes"),
+                        data.get("ratings")[0].get("percent"),
+                        data.get("ratings")[0].get("votes"),
+                        data.get("ratings")[1].get("percent"),
+                        data.get("ratings")[1].get("votes"),
+                        data.get("ratings")[2].get("percent"),
+                        data.get("ratings")[2].get("votes"),
+                        data.get("ratings")[3].get("percent"),
+                        data.get("ratings")[3].get("votes"),
+                        data.get("ratings")[4].get("percent"),
+                        data.get("ratings")[4].get("votes"),
+                        data.get("ratings")[5].get("percent"),
+                        data.get("ratings")[5].get("votes"),
+                        data.get("ratings")[6].get("percent"),
+                        data.get("ratings")[6].get("votes"),
+                        data.get("ratings")[7].get("percent"),
+                        data.get("ratings")[7].get("votes"),
+                        data.get("ratings")[8].get("percent"),
+                        data.get("ratings")[8].get("votes"),
+                        data.get("ratings")[9].get("percent"),
+                        data.get("ratings")[9].get("votes")))
+    except Exception as e:
+        print(Exception, e)
+        cursor.execute("""INSERT INTO movie_user_ratings (rankUpDown, pop_movie_id, totalRating, totalRatingVotes, 
+        rating10percent, rating10Votes, rating9percent, rating9Votes, rating8percent, rating8Votes, rating7percent, 
+        rating7Votes, rating6percent, rating6Votes,rating5percent, rating5Votes, rating4percent, rating4Votes, 
+        rating3percent, rating3Votes, rating2percent, rating2Votes, rating1percent, rating1Votes) VALUES (?, ?, ?, ?, ?, 
+        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                       (a1,
+                        data.get("imDbId"),
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0"))
     conn.commit()
-
-
-def populate_no_2_movie(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
-    loc = f"https://imdb-api.com/en/API/UserRatings/{secrets.secret_key}/tt10131024"
+    loc = f"https://imdb-api.com/en/API/UserRatings/{secrets.secret_key}/{tt_id1}"
     results = requests.get(loc)
     if results.status_code != 200:
         print("help!")
         return
     data = results.json()
-
-    cursor.execute("""INSERT INTO movie_user_ratings (rankUpDown, pop_movie_id, totalRating, totalRatingVotes, 
-    rating10percent, rating10Votes, rating9percent, rating9Votes, rating8percent, rating8Votes, rating7percent, 
-    rating7Votes, rating6percent, rating6Votes,rating5percent, rating5Votes, rating4percent, rating4Votes, 
-    rating3percent, rating3Votes, rating2percent, rating2Votes, rating1percent, rating1Votes) VALUES (?, ?, ?, ?, ?, 
-    ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
-                   ("+1,452",
-                    data.get("imDbId"),
-                    "0",
-                    "0",
-                    "0",
-                    "0",
-                    "0",
-                    "0",
-                    "0",
-                    "0",
-                    "0",
-                    "0",
-                    "0",
-                    "0",
-                    "0",
-                    "0",
-                    "0",
-                    "0",
-                    "0",
-                    "0",
-                    "0",
-                    "0",
-                    "0",
-                    "0"))
+    try:
+        cursor.execute("""INSERT INTO movie_user_ratings (rankUpDown, pop_movie_id, totalRating, totalRatingVotes, 
+        rating10percent, rating10Votes, rating9percent, rating9Votes, rating8percent, rating8Votes, rating7percent, 
+        rating7Votes, rating6percent, rating6Votes,rating5percent, rating5Votes, rating4percent, rating4Votes, 
+        rating3percent, rating3Votes, rating2percent, rating2Votes, rating1percent, rating1Votes) VALUES (?, ?, ?, ?, 
+        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                       (a2,
+                        data.get("imDbId"),
+                        data.get("totalRating"),
+                        data.get("totalRatingVotes"),
+                        data.get("ratings")[0].get("percent"),
+                        data.get("ratings")[0].get("votes"),
+                        data.get("ratings")[1].get("percent"),
+                        data.get("ratings")[1].get("votes"),
+                        data.get("ratings")[2].get("percent"),
+                        data.get("ratings")[2].get("votes"),
+                        data.get("ratings")[3].get("percent"),
+                        data.get("ratings")[3].get("votes"),
+                        data.get("ratings")[4].get("percent"),
+                        data.get("ratings")[4].get("votes"),
+                        data.get("ratings")[5].get("percent"),
+                        data.get("ratings")[5].get("votes"),
+                        data.get("ratings")[6].get("percent"),
+                        data.get("ratings")[6].get("votes"),
+                        data.get("ratings")[7].get("percent"),
+                        data.get("ratings")[7].get("votes"),
+                        data.get("ratings")[8].get("percent"),
+                        data.get("ratings")[8].get("votes"),
+                        data.get("ratings")[9].get("percent"),
+                        data.get("ratings")[9].get("votes")))
+    except Exception as e:
+        print(Exception, e)
+        cursor.execute("""INSERT INTO movie_user_ratings (rankUpDown, pop_movie_id, totalRating, totalRatingVotes, 
+        rating10percent, rating10Votes, rating9percent, rating9Votes, rating8percent, rating8Votes, rating7percent, 
+        rating7Votes, rating6percent, rating6Votes,rating5percent, rating5Votes, rating4percent, rating4Votes, 
+        rating3percent, rating3Votes, rating2percent, rating2Votes, rating1percent, rating1Votes) VALUES (?, ?, ?, ?, 
+        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                       (a2,
+                        data.get("imDbId"),
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0"))
     conn.commit()
-
-
-def populate_no_3_movie(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
-    loc = f"https://imdb-api.com/en/API/UserRatings/{secrets.secret_key}/tt8851148"
+    loc = f"https://imdb-api.com/en/API/UserRatings/{secrets.secret_key}/{tt_id2}"
     results = requests.get(loc)
     if results.status_code != 200:
         print("help!")
         return
     data = results.json()
-
-    cursor.execute("""INSERT INTO movie_user_ratings (rankUpDown, pop_movie_id, totalRating, totalRatingVotes, 
-    rating10percent, rating10Votes, rating9percent, rating9Votes, rating8percent, rating8Votes, rating7percent, 
-    rating7Votes, rating6percent, rating6Votes,rating5percent, rating5Votes, rating4percent, rating4Votes, 
-    rating3percent, rating3Votes, rating2percent, rating2Votes, rating1percent, rating1Votes) VALUES (?, ?, ?, ?, ?, 
-    ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
-                   ("+991",
-                    data.get("imDbId"),
-                    data.get("totalRating"),
-                    data.get("totalRatingVotes"),
-                    data.get("ratings")[0].get("percent"),
-                    data.get("ratings")[0].get("votes"),
-                    data.get("ratings")[1].get("percent"),
-                    data.get("ratings")[1].get("votes"),
-                    data.get("ratings")[2].get("percent"),
-                    data.get("ratings")[2].get("votes"),
-                    data.get("ratings")[3].get("percent"),
-                    data.get("ratings")[3].get("votes"),
-                    data.get("ratings")[4].get("percent"),
-                    data.get("ratings")[4].get("votes"),
-                    data.get("ratings")[5].get("percent"),
-                    data.get("ratings")[5].get("votes"),
-                    data.get("ratings")[6].get("percent"),
-                    data.get("ratings")[6].get("votes"),
-                    data.get("ratings")[7].get("percent"),
-                    data.get("ratings")[7].get("votes"),
-                    data.get("ratings")[8].get("percent"),
-                    data.get("ratings")[8].get("votes"),
-                    data.get("ratings")[9].get("percent"),
-                    data.get("ratings")[9].get("votes")))
+    try:
+        cursor.execute("""INSERT INTO movie_user_ratings (rankUpDown, pop_movie_id, totalRating, totalRatingVotes, 
+        rating10percent, rating10Votes, rating9percent, rating9Votes, rating8percent, rating8Votes, rating7percent, 
+        rating7Votes, rating6percent, rating6Votes,rating5percent, rating5Votes, rating4percent, rating4Votes, 
+        rating3percent, rating3Votes, rating2percent, rating2Votes, rating1percent, rating1Votes) VALUES (?, ?, ?, ?, 
+        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                       (a3,
+                        data.get("imDbId"),
+                        data.get("totalRating"),
+                        data.get("totalRatingVotes"),
+                        data.get("ratings")[0].get("percent"),
+                        data.get("ratings")[0].get("votes"),
+                        data.get("ratings")[1].get("percent"),
+                        data.get("ratings")[1].get("votes"),
+                        data.get("ratings")[2].get("percent"),
+                        data.get("ratings")[2].get("votes"),
+                        data.get("ratings")[3].get("percent"),
+                        data.get("ratings")[3].get("votes"),
+                        data.get("ratings")[4].get("percent"),
+                        data.get("ratings")[4].get("votes"),
+                        data.get("ratings")[5].get("percent"),
+                        data.get("ratings")[5].get("votes"),
+                        data.get("ratings")[6].get("percent"),
+                        data.get("ratings")[6].get("votes"),
+                        data.get("ratings")[7].get("percent"),
+                        data.get("ratings")[7].get("votes"),
+                        data.get("ratings")[8].get("percent"),
+                        data.get("ratings")[8].get("votes"),
+                        data.get("ratings")[9].get("percent"),
+                        data.get("ratings")[9].get("votes")))
+    except Exception as e:
+        print(Exception, e)
+        cursor.execute("""INSERT INTO movie_user_ratings (rankUpDown, pop_movie_id, totalRating, totalRatingVotes, 
+        rating10percent, rating10Votes, rating9percent, rating9Votes, rating8percent, rating8Votes, rating7percent, 
+        rating7Votes, rating6percent, rating6Votes,rating5percent, rating5Votes, rating4percent, rating4Votes, 
+        rating3percent, rating3Votes, rating2percent, rating2Votes, rating1percent, rating1Votes) VALUES (?, ?, ?, ?, 
+        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                       (a3,
+                        data.get("imDbId"),
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0"))
     conn.commit()
-
-
-def populate_no_4_movie(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
-    loc = f"https://imdb-api.com/en/API/UserRatings/{secrets.secret_key}/tt13634480"
+    loc = f"https://imdb-api.com/en/API/UserRatings/{secrets.secret_key}/{tt_id3}"
     results = requests.get(loc)
     if results.status_code != 200:
         print("help!")
         return
     data = results.json()
-
-    cursor.execute("""INSERT INTO movie_user_ratings (rankUpDown, pop_movie_id, totalRating, totalRatingVotes, 
-    rating10percent, rating10Votes, rating9percent, rating9Votes, rating8percent, rating8Votes, rating7percent, 
-    rating7Votes, rating6percent, rating6Votes,rating5percent, rating5Votes, rating4percent, rating4Votes, 
-    rating3percent, rating3Votes, rating2percent, rating2Votes, rating1percent, rating1Votes) VALUES (?, ?, ?, ?, ?, 
-    ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
-                   ("-48",
-                    data.get("imDbId"),
-                    data.get("totalRating"),
-                    data.get("totalRatingVotes"),
-                    data.get("ratings")[0].get("percent"),
-                    data.get("ratings")[0].get("votes"),
-                    data.get("ratings")[1].get("percent"),
-                    data.get("ratings")[1].get("votes"),
-                    data.get("ratings")[2].get("percent"),
-                    data.get("ratings")[2].get("votes"),
-                    data.get("ratings")[3].get("percent"),
-                    data.get("ratings")[3].get("votes"),
-                    data.get("ratings")[4].get("percent"),
-                    data.get("ratings")[4].get("votes"),
-                    data.get("ratings")[5].get("percent"),
-                    data.get("ratings")[5].get("votes"),
-                    data.get("ratings")[6].get("percent"),
-                    data.get("ratings")[6].get("votes"),
-                    data.get("ratings")[7].get("percent"),
-                    data.get("ratings")[7].get("votes"),
-                    data.get("ratings")[8].get("percent"),
-                    data.get("ratings")[8].get("votes"),
-                    data.get("ratings")[9].get("percent"),
-                    data.get("ratings")[9].get("votes")))
+    try:
+        cursor.execute("""INSERT INTO movie_user_ratings (rankUpDown, pop_movie_id, totalRating, totalRatingVotes, 
+        rating10percent, rating10Votes, rating9percent, rating9Votes, rating8percent, rating8Votes, rating7percent, 
+        rating7Votes, rating6percent, rating6Votes,rating5percent, rating5Votes, rating4percent, rating4Votes, 
+        rating3percent, rating3Votes, rating2percent, rating2Votes, rating1percent, rating1Votes) VALUES (?, ?, ?, ?, 
+        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                       (a4,
+                        data.get("imDbId"),
+                        data.get("totalRating"),
+                        data.get("totalRatingVotes"),
+                        data.get("ratings")[0].get("percent"),
+                        data.get("ratings")[0].get("votes"),
+                        data.get("ratings")[1].get("percent"),
+                        data.get("ratings")[1].get("votes"),
+                        data.get("ratings")[2].get("percent"),
+                        data.get("ratings")[2].get("votes"),
+                        data.get("ratings")[3].get("percent"),
+                        data.get("ratings")[3].get("votes"),
+                        data.get("ratings")[4].get("percent"),
+                        data.get("ratings")[4].get("votes"),
+                        data.get("ratings")[5].get("percent"),
+                        data.get("ratings")[5].get("votes"),
+                        data.get("ratings")[6].get("percent"),
+                        data.get("ratings")[6].get("votes"),
+                        data.get("ratings")[7].get("percent"),
+                        data.get("ratings")[7].get("votes"),
+                        data.get("ratings")[8].get("percent"),
+                        data.get("ratings")[8].get("votes"),
+                        data.get("ratings")[9].get("percent"),
+                        data.get("ratings")[9].get("votes")))
+    except Exception as e:
+        print(Exception, e)
+        cursor.execute("""INSERT INTO movie_user_ratings (rankUpDown, pop_movie_id, totalRating, totalRatingVotes, 
+        rating10percent, rating10Votes, rating9percent, rating9Votes, rating8percent, rating8Votes, rating7percent, 
+        rating7Votes, rating6percent, rating6Votes,rating5percent, rating5Votes, rating4percent, rating4Votes, 
+        rating3percent, rating3Votes, rating2percent, rating2Votes, rating1percent, rating1Votes) VALUES (?, ?, ?, ?, 
+        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                       (a4,
+                        data.get("imDbId"),
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0",
+                        "0"))
     conn.commit()
 
 
@@ -613,12 +760,9 @@ def main():
     setup_top250_movies(curs, conn)
     populate_top250_movies(curs, conn)
     setup_most_popular_movies(curs, conn)
-    populate_most_popular_movies(curs, conn)
     setup_movie_user_ratings(curs, conn)
-    populate_no_1_movie(curs, conn)
-    populate_no_2_movie(curs, conn)
-    populate_no_3_movie(curs, conn)
-    populate_no_4_movie(curs, conn)
+    populate_most_popular_movies(curs, conn)
+    populate_rankings_movie(curs, conn)
 
 
 main()
