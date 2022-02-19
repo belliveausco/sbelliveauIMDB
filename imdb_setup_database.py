@@ -744,6 +744,41 @@ def populate_rankings_movie(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
     conn.commit()
 
 
+def setup_most_popular_tv_shows(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
+    cursor.execute("""DROP TABLE IF EXISTS most_popular_tv_shows""")
+    cursor.execute("""CREATE TABLE IF NOT EXISTS most_popular_tv_shows(pop_tv_id TEXT PRIMARY KEY,
+                        rankUpDown TEXT NOT NULL,
+                        title TEXT NOT NULL,
+                        fullTitle TEXT NOT NULL,
+                        year TEXT NOT NULL,
+                        crew TEXT NOT NULL,
+                        imDbRating TEXT NOT NULL,
+                        imDbRatingCount TEXT NOT NULL);""")
+    conn.commit()
+
+
+def populate_most_popular_tv_shows(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
+    loc = f"https://imdb-api.com/en/API/MostPopularTVs/{secrets.secret_key}"
+    results = requests.get(loc)
+    if results.status_code != 200:
+        print("help!")
+        return
+    data = results.json()
+    for i in range(0, 100):
+        cursor.execute("""INSERT INTO most_popular_tv_shows (pop_tv_id, rankUpDown, title, fullTitle, year, crew, 
+        imDbRating, imDbRatingCount) VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+                       (data.get("items")[i].get("id"),
+                        data.get("items")[i].get("rankUpDown"),
+                        data.get("items")[i].get("title"),
+                        data.get("items")[i].get("fullTitle"),
+                        data.get("items")[i].get("year"),
+                        data.get("items")[i].get("crew"),
+                        data.get("items")[i].get("imDbRating"),
+                        data.get("items")[i].get("imDbRatingCount")
+                        ))
+    conn.commit()
+
+
 def main():
     database = 'imDb.db'
     conn, curs = open_db(database)
@@ -763,6 +798,8 @@ def main():
     setup_movie_user_ratings(curs, conn)
     populate_most_popular_movies(curs, conn)
     populate_rankings_movie(curs, conn)
+    setup_most_popular_tv_shows(curs, conn)
+    populate_most_popular_tv_shows(curs, conn)
 
 
 main()
