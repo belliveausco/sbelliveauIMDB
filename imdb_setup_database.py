@@ -779,6 +779,30 @@ def populate_most_popular_tv_shows(cursor: sqlite3.Cursor, conn: sqlite3.Connect
     conn.commit()
 
 
+def test_size1(cursor: sqlite3.Cursor):
+    result = cursor.execute(f'SELECT COUNT(movies250_id) FROM top250_movies;')
+    for column in result:
+        print(f'{column[0]}')
+        final_result = column[0]
+        return final_result
+
+
+def test_size2(cursor: sqlite3.Cursor):
+    result = cursor.execute(f'SELECT COUNT(pop_movie_id) FROM most_popular_movies;')
+    for column in result:
+        print(f'{column[0]}')
+        final_result = column[0]
+        return final_result
+
+
+def test_size3(cursor: sqlite3.Cursor):
+    result = cursor.execute(f'SELECT COUNT(pop_tv_id) FROM most_popular_tv_shows;')
+    for column in result:
+        print(f'{column[0]}')
+        final_result = column[0]
+        return final_result
+
+
 def main():
     database = 'imDb.db'
     conn, curs = open_db(database)
@@ -800,6 +824,9 @@ def main():
     populate_rankings_movie(curs, conn)
     setup_most_popular_tv_shows(curs, conn)
     populate_most_popular_tv_shows(curs, conn)
+    test_size1(curs)
+    test_size2(curs)
+    test_size3(curs)
 
 
 main()
