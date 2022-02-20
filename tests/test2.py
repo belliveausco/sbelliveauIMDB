@@ -1,5 +1,5 @@
 # Second automated test
-# saving to database and assuring what you wrote is there, look at posted code on github
+# saving to database and assuring what you wrote is there, look at posted code on gitHub
 import sqlite3
 from typing import Tuple
 
@@ -29,15 +29,15 @@ def test_main():
                        "year": "2020", "crew": "Miserable Students", "imDbRating": "8.5",
                        "imDbRatingCount": "64"}]}
 
-        cursor.execute("""INSERT INTO test_top250_tv_shows (id, title, fullTitle, year, crew, imDbRating, imDbRatingCount)
-                                  VALUES (?, ?, ?, ?, ?, ?, ?)""", (data.get("items")[0].get("id"),
-                                                                    data.get("items")[0].get("title"),
-                                                                    data.get("items")[0].get("fullTitle"),
-                                                                    data.get("items")[0].get("year"),
-                                                                    data.get("items")[0].get("crew"),
-                                                                    data.get("items")[0].get("imDbRating"),
-                                                                    data.get("items")[0].get("imDbRatingCount")
-                                                                    ))
+        cursor.execute("""INSERT INTO test_top250_tv_shows (id, title, fullTitle, year, crew, imDbRating, 
+        imDbRatingCount) VALUES (?, ?, ?, ?, ?, ?, ?)""", (data.get("items")[0].get("id"),
+                                                           data.get("items")[0].get("title"),
+                                                           data.get("items")[0].get("fullTitle"),
+                                                           data.get("items")[0].get("year"),
+                                                           data.get("items")[0].get("crew"),
+                                                           data.get("items")[0].get("imDbRating"),
+                                                           data.get("items")[0].get("imDbRatingCount")
+                                                           ))
         conn.commit()
 
         test_close_db(conn)
