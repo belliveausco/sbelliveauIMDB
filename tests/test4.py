@@ -3,7 +3,7 @@ import sqlite3
 from typing import Tuple
 
 
-# test4 checks that tables exist
+# test4 checks that tables exist and assert correct size
 
 def test_main():
     def test_open_db(filename: str) -> Tuple[sqlite3.Connection, sqlite3.Cursor]:
