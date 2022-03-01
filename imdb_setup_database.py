@@ -374,6 +374,7 @@ def populate_top250_movies(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
 def setup_most_popular_movies(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
     cursor.execute("""DROP TABLE IF EXISTS most_popular_movies""")
     cursor.execute("""CREATE TABLE IF NOT EXISTS most_popular_movies(pop_movie_id TEXT PRIMARY KEY,
+                        rank INTEGER NOT NULL,
                         rankUpDown INTEGER NOT NULL,
                         title TEXT NOT NULL,
                         fullTitle TEXT NOT NULL,
@@ -392,9 +393,10 @@ def populate_most_popular_movies(cursor: sqlite3.Cursor, conn: sqlite3.Connectio
         return
     data = results.json()
     for i in range(0, 100):
-        cursor.execute("""INSERT INTO most_popular_movies (pop_movie_id, rankUpDown, title, fullTitle, year, crew, 
-        imDbRating, imDbRatingCount) VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+        cursor.execute("""INSERT INTO most_popular_movies (pop_movie_id, rank, rankUpDown, title, fullTitle, year, crew, 
+        imDbRating, imDbRatingCount) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
                        (data.get("items")[i].get("id"),
+                        int(data.get("items")[i].get("rank")),
                         int((data.get("items")[i].get("rankUpDown").replace(',', ''))),
                         data.get("items")[i].get("title"),
                         data.get("items")[i].get("fullTitle"),
@@ -747,7 +749,8 @@ def populate_rankings_movie(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
 def setup_most_popular_tv_shows(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
     cursor.execute("""DROP TABLE IF EXISTS most_popular_tv_shows""")
     cursor.execute("""CREATE TABLE IF NOT EXISTS most_popular_tv_shows(pop_tv_id TEXT PRIMARY KEY,
-                        rankUpDown TEXT NOT NULL,
+                        rank INTEGER NOT NULL,
+                        rankUpDown INTEGER NOT NULL,
                         title TEXT NOT NULL,
                         fullTitle TEXT NOT NULL,
                         year TEXT NOT NULL,
@@ -765,10 +768,11 @@ def populate_most_popular_tv_shows(cursor: sqlite3.Cursor, conn: sqlite3.Connect
         return
     data = results.json()
     for i in range(0, 100):
-        cursor.execute("""INSERT INTO most_popular_tv_shows (pop_tv_id, rankUpDown, title, fullTitle, year, crew, 
-        imDbRating, imDbRatingCount) VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+        cursor.execute("""INSERT INTO most_popular_tv_shows (pop_tv_id, rank, rankUpDown, title, fullTitle, year, crew, 
+        imDbRating, imDbRatingCount) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""",
                        (data.get("items")[i].get("id"),
-                        data.get("items")[i].get("rankUpDown"),
+                        int(data.get("items")[i].get("rank")),
+                        int((data.get("items")[i].get("rankUpDown").replace(',', ''))),
                         data.get("items")[i].get("title"),
                         data.get("items")[i].get("fullTitle"),
                         data.get("items")[i].get("year"),

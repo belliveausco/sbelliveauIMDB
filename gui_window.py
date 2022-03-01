@@ -78,6 +78,12 @@ class Visualization_Methods(QMainWindow):
         self.cursor = curs
         self.connection = conn
 
+        # Function windows
+        '''
+        self.window = most_popular_movies_by_ranking(self.connection, self.cursor)
+        self.window = most_popular_movies_by_rankUpDown(self.connection, self.cursor)
+        '''
+
         # Setting up UI
         self.setup_ui()
 
