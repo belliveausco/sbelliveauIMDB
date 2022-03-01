@@ -833,4 +833,5 @@ def main():
     test_size3(curs)
 
 
-main()
+if __name__ == '__main__':
+    main()
