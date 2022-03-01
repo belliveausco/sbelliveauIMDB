@@ -1,13 +1,8 @@
 import sqlite3
-from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton, QLineEdit, QLabel, QRadioButton, QMessageBox, \
-    QWidget, QTableWidget, QTableWidgetItem, QVBoxLayout
-from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton
 import sqlite3 as sql
 import imdb_setup_database
 import the_most_popular_movies_by_ranking
-import sys
 
 
 class Window(QMainWindow):
@@ -126,6 +121,5 @@ class Visualization_Methods(QMainWindow):
         # Showing Ui
         self.show()
 
-    def test_button_connection(self, checked):
+    def test_button_connection(self):
         self.window.show()
-
