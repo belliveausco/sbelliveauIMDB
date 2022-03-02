@@ -12,7 +12,7 @@ class App(QWidget):
         self.cursor = curs
         self.connection = conn
 
-        self.title = 'Most Popular Movies By RankUpDowns'
+        self.title = 'Most Popular TV Shows By Rankings'
         self.left = 0
         self.top = 0
         self.width = 1250
@@ -36,11 +36,11 @@ class App(QWidget):
         self.tableWidget = QTableWidget(self)
         self.tableWidget.setRowCount(100)  # rows
         self.tableWidget.setColumnCount(9)  # Columns
-        self.tableWidget.setHorizontalHeaderLabels(["pop_movie_id", "rank", "rankUpDown", "title", "fullTitle", "year",
+        self.tableWidget.setHorizontalHeaderLabels(["pop_tv_id", "rank", "rankUpDown", "title", "fullTitle", "year",
                                                     "crew", "imDbRating", "imDbRatingCount"])
         conn = sql.connect('imDb.db')
         cursor = conn.cursor()
-        query = "SELECT * FROM most_popular_movies ORDER BY rankUpDown DESC;"
+        query = "SELECT * FROM most_popular_tv_shows ORDER BY rank;"
 
         table_row = 0
         for row in cursor.execute(query):
