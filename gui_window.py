@@ -6,6 +6,8 @@ import the_most_popular_movies_by_ranking
 import the_most_popular_movies_by_rankUpDown
 import the_most_popular_tv_by_rank
 import the_most_popular_tv_by_rankUpDown
+import pop_movie_rankings
+import top_250_tv_show_rankings
 
 
 class Window(QMainWindow):
@@ -87,11 +89,11 @@ class Visualization_Methods(QMainWindow):
         self.window2.hide()
         self.window3 = the_most_popular_tv_by_rankUpDown.App(self.connection, self.cursor)
         self.window3.hide()
-        '''
-        self.window4 = pop_movie_rankings(self.connection, self.cursor)
+        self.window4 = pop_movie_rankings.App(self.connection, self.cursor)
         self.window4.hide()
-        self.window5 = top_250_tv_show_rankings(self.connection, self.cursor)
+        self.window5 = top_250_tv_show_rankings.App(self.connection, self.cursor)
         self.window5.hide()
+        '''
         self.window6 = graph_most_popular_movies_moving_up(self.connection, self.cursor)
         self.window6.hide()
         self.window7 = graph_most_popular_movies_moving_down(self.connection, self.cursor)
@@ -111,6 +113,8 @@ class Visualization_Methods(QMainWindow):
         self.test_button1 = QPushButton(self)
         self.test_button2 = QPushButton(self)
         self.test_button3 = QPushButton(self)
+        self.test_button4 = QPushButton(self)
+        self.test_button5 = QPushButton(self)
 
         # Setting up UI
         self.setup_ui()
@@ -139,6 +143,16 @@ class Visualization_Methods(QMainWindow):
         self.test_button3.setText('most popular tv shows sorted by rankUpDown')
         self.test_button3.clicked.connect(self.test_button3_connection)
 
+        self.test_button4.resize(500, 30)
+        self.test_button4.move(150, 250)
+        self.test_button4.setText('popular movie ratings')
+        self.test_button4.clicked.connect(self.test_button4_connection)
+
+        self.test_button5.resize(500, 30)
+        self.test_button5.move(150, 300)
+        self.test_button5.setText('top 250 tv show ratings')
+        self.test_button5.clicked.connect(self.test_button5_connection)
+
         # Showing Ui
         self.show()
 
@@ -153,3 +167,9 @@ class Visualization_Methods(QMainWindow):
 
     def test_button3_connection(self):
         self.window3.show()
+
+    def test_button4_connection(self):
+        self.window4.show()
+
+    def test_button5_connection(self):
+        self.window5.show()

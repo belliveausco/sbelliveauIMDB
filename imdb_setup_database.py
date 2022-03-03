@@ -28,7 +28,7 @@ def setup_top250_tv_shows(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
 
 def setup_user_ratings(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
     cursor.execute("""DROP TABLE IF EXISTS user_ratings""")
-    cursor.execute("""CREATE TABLE IF NOT EXISTS user_ratings(ranking TEXT,
+    cursor.execute("""CREATE TABLE IF NOT EXISTS user_ratings(ranking INTEGER,
                         id TEXT,
                         totalRating TEXT NOT NULL,
                         totalRatingVotes TEXT NOT NULL,
@@ -118,7 +118,7 @@ def populate_no_1_show(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
         rating6percent, rating6Votes,rating5percent, rating5Votes, rating4percent, rating4Votes, rating3percent, 
         rating3Votes, rating2percent, rating2Votes, rating1percent, rating1Votes) 
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
-                   ("1",
+                   (1,
                     data.get("imDbId"),
                     data.get("totalRating"),
                     data.get("totalRatingVotes"),
@@ -158,7 +158,7 @@ def populate_no_50_show(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
         rating6percent, rating6Votes,rating5percent, rating5Votes, rating4percent, rating4Votes, rating3percent, 
         rating3Votes, rating2percent, rating2Votes, rating1percent, rating1Votes) 
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
-                   ("50",
+                   (50,
                     data.get("imDbId"),
                     data.get("totalRating"),
                     data.get("totalRatingVotes"),
@@ -198,7 +198,7 @@ def populate_no_100_show(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
         rating6percent, rating6Votes,rating5percent, rating5Votes, rating4percent, rating4Votes, rating3percent, 
         rating3Votes, rating2percent, rating2Votes, rating1percent, rating1Votes) 
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
-                   ("100",
+                   (100,
                     data.get("imDbId"),
                     data.get("totalRating"),
                     data.get("totalRatingVotes"),
@@ -239,7 +239,7 @@ def populate_no_200_show(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
             rating6percent, rating6Votes,rating5percent, rating5Votes, rating4percent, rating4Votes, rating3percent, 
             rating3Votes, rating2percent, rating2Votes, rating1percent, rating1Votes) 
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
-                       ("200",
+                       (200,
                         data.get("imDbId"),
                         data.get("totalRating"),
                         data.get("totalRatingVotes"),
@@ -271,7 +271,7 @@ def populate_no_200_show(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
                     rating4Votes, rating3percent, rating3Votes, rating2percent, rating2Votes, rating1percent, 
                     rating1Votes) 
                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
-                       ("200",
+                       (200,
                         data.get("imDbId"),
                         data.get("totalRating"),
                         data.get("totalRatingVotes"),
@@ -312,7 +312,7 @@ def populate_wot_show(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
         rating6percent, rating6Votes,rating5percent, rating5Votes, rating4percent, rating4Votes, rating3percent, 
         rating3Votes, rating2percent, rating2Votes, rating1percent, rating1Votes) 
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
-                   ("251",
+                   (251,
                     data.get("imDbId"),
                     data.get("totalRating"),
                     data.get("totalRatingVotes"),
