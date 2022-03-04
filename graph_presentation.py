@@ -2,7 +2,7 @@ import sqlite3
 from PyQt5 import QtWidgets
 from pyqtgraph import PlotWidget, plot
 import pyqtgraph as pg
-import sys  # We need sys so that we can pass argv to QApplication
+import sys
 import os
 import sqlite3 as sql
 
@@ -70,7 +70,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.graphWidget.setLabel("left", "Number of Movies/TV Shows", color="blue", **styles)
         self.graphWidget.setLabel("bottom", "Red = popular_movies_moving_up, Blue = popular_movies_moving_down, Green "
                                             "= popular_tv_moving_up, Yellow = popular_tv_moving_down", color="blue",
-                                  **styles)
+                                            **styles)
         spot1 = [1]
         spot2 = [2]
         spot3 = [3]

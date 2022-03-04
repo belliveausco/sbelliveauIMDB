@@ -8,7 +8,10 @@ import the_most_popular_tv_by_rank
 import the_most_popular_tv_by_rankUpDown
 import pop_movie_rankings
 import top_250_tv_show_rankings
+import top_250_tv_shows
+import top_250_movies
 import graph_presentation
+import top_250_movies_and_most_popular
 
 
 class Window(QMainWindow):
@@ -96,17 +99,15 @@ class Visualization_Methods(QMainWindow):
         self.window5.hide()
         self.window6 = graph_presentation.MainWindow(self.connection, self.cursor)
         self.window6.hide()
-        '''
-        self.window7 = graph_most_popular_movies_moving_down(self.connection, self.cursor)
+        self.window7 = top_250_tv_shows.App(self.connection, self.cursor)
         self.window7.hide()
-        self.window8 = graph_most_popular_tv_moving_up(self.connection, self.cursor)
+        self.window8 = top_250_movies.App(self.connection, self.cursor)
         self.window8.hide()
-        self.window9 = graph_most_popular_tv_moving_down(self.connection, self.cursor)
+        self.window9 = top_250_movies_and_most_popular.App(self.connection, self.cursor)
         self.window9.hide()
-        self.window10 = top_250_movies_and_most_popular(self.connection, self.cursor)
+        '''
+        self.window10 = top_250_tv_and_most_popular(self.connection, self.cursor)
         self.window10.hide()
-        self.window11 = top_250_tv_and_most_popular(self.connection, self.cursor)
-        self.window11.hide()
         '''
 
         # Menu Buttons
@@ -117,6 +118,9 @@ class Visualization_Methods(QMainWindow):
         self.test_button4 = QPushButton(self)
         self.test_button5 = QPushButton(self)
         self.test_button6 = QPushButton(self)
+        self.test_button7 = QPushButton(self)
+        self.test_button8 = QPushButton(self)
+        self.test_button9 = QPushButton(self)
 
         # Setting up UI
         self.setup_ui()
@@ -150,15 +154,30 @@ class Visualization_Methods(QMainWindow):
         self.test_button4.setText('popular movie ratings')
         self.test_button4.clicked.connect(self.test_button4_connection)
 
+        self.test_button7.resize(500, 30)
+        self.test_button7.move(150, 350)
+        self.test_button7.setText('top 250 tv shows')
+        self.test_button7.clicked.connect(self.test_button7_connection)
+
         self.test_button5.resize(500, 30)
-        self.test_button5.move(150, 350)
+        self.test_button5.move(150, 400)
         self.test_button5.setText('top 250 tv show ratings')
         self.test_button5.clicked.connect(self.test_button5_connection)
 
+        self.test_button8.resize(500, 30)
+        self.test_button8.move(150, 450)
+        self.test_button8.setText('top 250 movies')
+        self.test_button8.clicked.connect(self.test_button8_connection)
+
         self.test_button6.resize(500, 30)
-        self.test_button6.move(150, 450)
+        self.test_button6.move(150, 500)
         self.test_button6.setText('graphical presentation of data')
         self.test_button6.clicked.connect(self.test_button6_connection)
+
+        self.test_button9.resize(500, 30)
+        self.test_button9.move(150, 550)
+        self.test_button9.setText('top250 movies and most popular movies')
+        self.test_button9.clicked.connect(self.test_button9_connection)
 
         # Showing Ui
         self.show()
@@ -183,3 +202,12 @@ class Visualization_Methods(QMainWindow):
 
     def test_button6_connection(self):
         self.window6.show()
+
+    def test_button7_connection(self):
+        self.window7.show()
+
+    def test_button8_connection(self):
+        self.window8.show()
+
+    def test_button9_connection(self):
+        self.window9.show()
