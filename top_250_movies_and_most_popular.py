@@ -47,17 +47,6 @@ class App(QWidget):
                 "top250_movies " \
                 "INNER JOIN " \
                 "most_popular_movies ON top250_movies.movies250_id = most_popular_movies.pop_movie_id; "
-        '''
-        SELECT
-        Orders.OrderID, Customers.CustomerName
-        FROM
-        Orders
-        INNER
-        JOIN
-        Customers
-        ON
-        Orders.CustomerID = Customers.CustomerID;
-        '''
         table_row = 0
         for row in cursor.execute(query):
             self.tableWidget.setItem(table_row, 0, QTableWidgetItem(str(row[0])))
