@@ -146,7 +146,7 @@ def populate_no_1_show(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
 
 
 def populate_no_50_show(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
-    loc = f"https://imdb-api.com/en/API/UserRatings/{secrets.secret_key}/tt2297757"
+    loc = f"https://imdb-api.com/en/API/UserRatings/{secrets.secret_key}/tt2571774"
     results = requests.get(loc)
     if results.status_code != 200:
         print("help!")
@@ -186,7 +186,7 @@ def populate_no_50_show(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
 
 
 def populate_no_100_show(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
-    loc = f"https://imdb-api.com/en/API/UserRatings/{secrets.secret_key}/tt0388629"
+    loc = f"https://imdb-api.com/en/API/UserRatings/{secrets.secret_key}/tt0758745"
     results = requests.get(loc)
     if results.status_code != 200:
         print("help!")
@@ -226,7 +226,7 @@ def populate_no_100_show(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
 
 
 def populate_no_200_show(cursor: sqlite3.Cursor, conn: sqlite3.Connection):
-    loc = f"https://imdb-api.com/en/API/UserRatings/{secrets.secret_key}/tt1534360"
+    loc = f"https://imdb-api.com/en/API/UserRatings/{secrets.secret_key}/tt1758429"
     results = requests.get(loc)
     if results.status_code != 200:
         print("help!")
