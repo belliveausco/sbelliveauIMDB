@@ -19,6 +19,8 @@ The main files are main.py, guiwindow.py although it has elements from the_most_
 , top_250_tv_show_rankings.py, top_250_tv_shows.py, top_250_movies.py, graph_presentation.py, top_250_movies_and_most_popular.py
 , top_250_tv_and_most_popular.py. NOTE: Must run main.py to run guiwindow.py
 
+LOOK AT GUI DETAILED MANUAL TEST for information regarding expected experience for user using this graphical user inteface
+
 a brief description of what is missing from the project (if anything)
 Fucntion that allows user to see ratings if selecting a column attempted to do this with seperate textbox but ran into many errors so I included them as their own button/window/function.
 '''
