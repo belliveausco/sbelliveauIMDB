@@ -22,5 +22,5 @@ The main files are main.py, guiwindow.py although it has elements from the_most_
 LOOK AT GUI DETAILED MANUAL TEST for information regarding expected experience for user using this graphical user inteface
 
 a brief description of what is missing from the project (if anything)
-Function that allows user to see ratings if selecting a column attempted to do this with seperate textbox but ran into many errors so I included them as their own button/window/function.
+Function that allows user to see ratings if selecting a column attempted to do this with seperate textbox but ran into many errors so I included them as their own button/window/function. Tests should run like normal tests for some reason I have trouble pushing unit test files but they are included and should function appropriately. 
 '''
