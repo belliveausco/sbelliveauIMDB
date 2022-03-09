@@ -11,7 +11,7 @@ import secrets
 import PyQt5
 import pyqtgraph
 
-Test 6 checks query that orders tables based on ranking, Test 7 checks query that orders tables by rankUpDown, Test 8 checks function that records how many psotive or negative movers are found within tables and Test 9 checks cross over query and uses mutiple assertions to test its accuracy, Test 8 asserts correct length of data is added when calling again, using same method as utilized in update data button found in gui_window
+Test 6 checks query that orders tables based on ranking, Test 7 checks query that orders tables by rankUpDown, Test 8 checks function that records how many psotive or negative movers are found within tables and Test 9 checks cross over query and uses mutiple assertions to test its accuracy, Test 10 asserts correct length of data is added when calling again, using same method as utilized in update data button found in gui_window
 
 The project adds a visual element to the database and organizes the gui application from updating the data (which calls methods to from imdb setupd database file), and data visualization. It then organizes data visualization into categories from Movies, TV Shows and Data Analysis.
 
